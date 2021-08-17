@@ -3,10 +3,9 @@ const DATA_CACHE_NAME = 'data-cache-v1';
 const FILES_TO_CACHE = [
     '/',
     '/index.html',
-    '/style.css',
+    '/styles.css',
     '/index.js',
     '/db.js',
-    '/dist/app.bundle.js',
     '/icons/icon-192x192.png',
     '/icons/icon-512x512.png',
   ];
@@ -41,23 +40,34 @@ const FILES_TO_CACHE = [
     );
   });
   
-  self.addEventListener('fetch', (event) => {
-    if (event.request.url.startsWith(self.location.origin)) {
+  self.addEventListener('fetch', function (event) {
+    if (event.request.url.includes('/api/transaction')) {
       event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-  
-          return caches.open(CACHE_NAME).then((cache) => {
-            return fetch(event.request).then((response) => {
-              return cache.put(event.request, response.clone()).then(() => {
+        caches
+          .open(DATA_CACHE_NAME)
+          .then((cache) => {
+            return fetch(event.request)
+              .then((response) => {
+                if (response.status === 200) {
+                  cache.put(event.request.url, response.clone());
+                }
                 return response;
+              })
+              .catch((err) => {
+                return cache.match(event.request);
               });
-            });
-          });
-        })
+          })
+          .catch((err) => console.log(err))
       );
+      return;
     }
+  
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((response) => {
+          return response || fetch(event.request);
+        });
+      })
+    );
   });
   
