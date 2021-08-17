@@ -18,5 +18,5 @@ request.onupgradeneeded = function (e) {
 };
 
 request.onerror = function (e) {
-
+    console.log(`This error has occurred: ${e.target.errorCode}`);
 }
