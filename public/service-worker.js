@@ -6,6 +6,7 @@ const FILES_TO_CACHE = [
     '/style.css',
     '/index.js',
     '/db.js',
+    '/dist/app.bundle.js',
     '/icons/icon-192x192.png',
     '/icons/icon-512x512.png',
   ];
@@ -13,6 +14,8 @@ const FILES_TO_CACHE = [
   self.addEventListener('install', (event) => {
     event.waitUntil(
       caches
+        .open(DATA_CACHE_NAME)
+        .then((cache) => cache.add('/api/images'))
         .open(CACHE_NAME)
         .then((cache) => cache.addAll(FILES_TO_CACHE))
         .then(self.skipWaiting())
