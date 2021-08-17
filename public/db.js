@@ -2,7 +2,7 @@ let db;
 let budgetVersion;
 
 // Create a new db request for a budget database
-const request = indexedDB.open('BudgetDB', budgetVersion || 21);
+const request = indexedDB.open('BudgetDB', budgetVersion || 1);
 
 request.onupgradeneeded = function (e) {
     const { oldVersion } = e;
@@ -19,7 +19,7 @@ request.onupgradeneeded = function (e) {
 
 request.onerror = function (e) {
     console.log(`This error has occurred: ${e.target.errorCode}`);
-}
+};
 
 function checkDatabase() {
     let transaction = db.transaction(['BudgetStore'], 'readwrite');
@@ -50,7 +50,7 @@ function checkDatabase() {
             });
         }
     };
-}
+};
 
 request.onsuccess = function (e) {
     db = e.target.result;
