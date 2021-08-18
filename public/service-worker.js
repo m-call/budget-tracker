@@ -22,7 +22,7 @@ const FILES_TO_CACHE = [
     );
   });
   
-  // The activate handler takes care of cleaning up old caches.
+  // Event listener for deleting old caches
   self.addEventListener('activate', (event) => {
     event.waitUntil(
       caches
