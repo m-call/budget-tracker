@@ -1,3 +1,4 @@
+// Declaring variables for cache
 const CACHE_NAME = 'static-cache-v2';
 const DATA_CACHE_NAME = 'data-cache-v1';
 const FILES_TO_CACHE = [
@@ -11,6 +12,7 @@ const FILES_TO_CACHE = [
     '/icons/icon-512x512.png',
   ];
   
+  // Event listener for adding the caches
   self.addEventListener('install', (event) => {
     event.waitUntil(
       caches
@@ -39,6 +41,7 @@ const FILES_TO_CACHE = [
     );
   });
   
+  // Event listener for the fetch call that is made for a new transaction and caching it
   self.addEventListener('fetch', function (event) {
     if (event.request.url.includes('/api/transaction')) {
       event.respondWith(
